@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Climb Recorder</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+<body>
+<div id="app" class="container">
+    <h1>Liste des licenciés :</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Identifiant</th>
+            <th>Numéro licence FFME</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Initiateur</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="personne in personnes" :key="personne.idPersonne">
+            <td>{{ personne.idPersonne }}</td>
+            <td>{{ personne.numLicence }}</td>
+            <td>{{ personne.nom }}</td>
+            <td>{{ personne.prenom }}</td>
+            <td><img v-bind:src="getInitiateurIcon(personne.estInitiateur)" alt="Initiateur"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
