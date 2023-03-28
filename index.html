@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Climb Recorder</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<center>
+    <nav class="navMenu">
+        <a href="#">Accueil</a>
+        <a href="#licencies">Licenciés</a>
+        <a href="#">Voies</a>
+        <a href="#">Cours</a>
+    </nav>
+    <div class="separator"></div>
+</center>
+
+
 <div id="app" class="container">
-    <h1>Liste des licenciés :</h1>
+    <h2 id="licencies">Liste des licenciés du club :</h2>
     <table class="table">
         <thead>
         <tr>
@@ -20,12 +31,36 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="personne in personnes" :key="personne.idPersonne">
+        <tr v-for="personne in personnes" :key="personne.idPersonne" v-on:click="selectPersonne(personne)">
             <td>{{ personne.idPersonne }}</td>
-            <td>{{ personne.numLicence }}</td>
+            <td><img v-bind:src="getNumLicence(personne.numLicence)" :alt="personne.numLicence"></td>
             <td>{{ personne.nom }}</td>
             <td>{{ personne.prenom }}</td>
             <td><img v-bind:src="getInitiateurIcon(personne.estInitiateur)" alt="Initiateur"></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+
+
+    <h2 id="voies">Liste des voies du club :</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Identifiant</th>
+            <th>Secteur</th>
+            <th>Couleur</th>
+            <th>Niveau</th>
+            <th>Ouvreur</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="voie in voies" :key="voie.idVoie" >
+            <td>{{ voie.idVoie }}</td>
+            <td>{{voie.secteur}}</td>
+            <td>{{ voie.couleur }}</td>
+            <td>{{ voie.niveau }}</td>
+            <td>{{voie.ouveur}}</td>
         </tr>
         </tbody>
     </table>

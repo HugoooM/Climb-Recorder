@@ -1,7 +1,10 @@
 new Vue({
     el: '#app',
     data: {
-        personnes: []
+        personnes: [],
+        voies: [],
+        personneSelectionnee: null,
+        tmp: []
     },
     mounted() {
         // appel de l'API pour récupérer les données
@@ -10,10 +13,25 @@ new Vue({
             .then(data => {
                 this.personnes = data;
             });
+
+        fetch('http://localhost:3000/voies')
+            .then(response => response.json())
+            .then(data => {
+                this.voies = data;
+            });
     },
     methods: {
         getInitiateurIcon: function(estInitiateur) {
             return estInitiateur ? 'check.png' : 'notCheck.png';
+        },
+
+        getNumLicence: function(numLicence) {
+            return numLicence ? numLicence : 'noLicence.png';
+        },
+
+        selectPersonne: function (personne) {
+            this.personneSelectionnee = personne;
+            window.location.href = "infoPersonne.html?id=" + personne.idPersonne;
         }
     }
 });

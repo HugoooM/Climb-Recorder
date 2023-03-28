@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Informations personnelles</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="container">
+        <h1>Informations de la personne</h1>
+        <p>Identifiant : {{ personne.idPersonne }}</p>
+        <p v-if="personne.numLicence!=null">Numéro de licence FFME : {{personne.numLicence}}</p>
+        <p>Nom : {{ personne.nom }}</p>
+        <p>Prénom : {{ personne.prenom }}</p>
+        <p v-if="personne.estInitiateur==1">Initiateur</p>
+    </div>
+</div>
+<script src="scriptInfoPersonne.js"></script>
+
+</body>
+</html>

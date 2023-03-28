@@ -1,0 +1,95 @@
+@font-face {
+    font-family: 'Maven';
+    src: url(https://fonts.google.com/specimen/Maven+Pro);
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Maven', sans-serif;
+}
+
+.container {
+    margin-top: 50px;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+h1 {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+
+
+.table {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #f2f2f2;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    height: 30px;
+}
+
+.table td {
+    font-size: 14px;
+    text-align: center;
+    vertical-align: middle;
+    height: 40px;
+}
+
+.table tr:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+
+img {
+    max-height: 50px;
+    max-width: 50px;
+}
+
+
+
+
+
+
+.navMenu {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.separator {
+    border-bottom: 1px solid #707070;
+    width: 65%;
+    height: 0;
+}
+
+
+.navMenu a {
+    color: #000000;
+    text-decoration: none;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    display: inline-block;
+    width: 200px;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    flex-grow: 1;
+}
+
+.navMenu a:hover {
+    color: #fddb3a;
+}
+

@@ -22,6 +22,36 @@ app.get('/personnes', (req, res) => {
     });
 });
 
+app.get('/personnes/:id', (req, res) => {
+    const sql = 'SELECT * FROM Personnes WHERE idPersonne = ?';
+    db.get(sql, [req.params.id], (err, row) => {
+        if (err) {
+            throw err;
+        }
+        res.send(row);
+    });
+});
+
+app.get('/voies', (req, res) => {
+    const sql = 'SELECT * FROM Voies';
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.send(rows);
+    });
+});
+
+app.get('/voies/:id', (req, res) => {
+    const sql = 'SELECT Voies.*, Personnes.nom, Personnes.prenom FROM Personnes, Voies WHERE ' +
+        'Personnes.idPersonne = Voies.ouveur AND Voies.idVoie = ?';
+    db.get(sql, [req.params.id], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.send(rows);
+    });
+});
 
 const port = 3000;
 app.listen(port, () => {
