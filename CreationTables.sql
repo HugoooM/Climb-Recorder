@@ -13,11 +13,11 @@ CREATE TABLE IF NOT EXISTS 'Voies'
     'secteur'  INTEGER NOT NULL,
     'couleur' TEXT NOT NULL,
     'niveau'  TEXT NOT NULL,
-    'ouveur'  INTEGER NOT NULL,
-    FOREIGN KEY(ouveur) REFERENCES Personnes(idPersonne)
+    'ouvreur'  INTEGER NOT NULL,
+    FOREIGN KEY(ouvreur) REFERENCES Personnes(idPersonne)
 );
 
-CREATE TABLE 'AFait'
+CREATE TABLE IF NOT EXISTS 'AFait'
 (
     'idAFait' INTEGER PRIMARY KEY AUTOINCREMENT,
     'idPersonne' INTEGER NOT NULL,

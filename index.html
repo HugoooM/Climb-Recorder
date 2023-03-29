@@ -11,7 +11,7 @@
     <nav class="navMenu">
         <a href="#">Accueil</a>
         <a href="#licencies">Licenciés</a>
-        <a href="#">Voies</a>
+        <a href="#voies">Voies</a>
         <a href="#">Cours</a>
     </nav>
     <div class="separator"></div>
@@ -59,8 +59,10 @@
             <td>{{ voie.idVoie }}</td>
             <td>{{voie.secteur}}</td>
             <td>{{ voie.couleur }}</td>
-            <td>{{ voie.niveau }}</td>
-            <td>{{voie.ouveur}}</td>
+            <td v-if="parseInt(voie.niveau.charAt(0))>6">{{ voie.niveau }}<span class="point" style="color: red; font-size: 60px">&#8226;</span></td>
+            <td v-if="[5,6].includes(parseInt(voie.niveau.charAt(0)))">{{ voie.niveau }}<span class="point" style="color: orange; font-size: 60px">&#8226;</span></td>
+            <td v-if="parseInt(voie.niveau.charAt(0))<5">{{ voie.niveau }}<span class="point" style="color: limegreen; font-size: 60px">&#8226;</span></td>
+            <td>{{voie.prenom}}  {{voie.nom}}</td>
         </tr>
         </tbody>
     </table>

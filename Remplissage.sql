@@ -5,10 +5,12 @@ VALUES ('Doe', 'John', 0),
        ('Doe', 'Jill', 0),
        ('Doe', 'Jenny', 1);
 
-INSERT INTO Voies(secteur, couleur, niveau, ouveur)
+INSERT INTO Voies(secteur, couleur, niveau, ouvreur)
 VALUES (1, 'Rouge', '6a', 1),
        (2, 'Orange', '6a', 2),
        (3, 'Violet', '5c', 1),
+       (3, 'Noir', '4c', 3),
+       (3, 'Bleu', '7a', 2),
        (4, 'Orange', '6a', 1);
 
 INSERT INTO AFait (idPersonne, idVoie, date)

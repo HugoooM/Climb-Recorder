@@ -33,7 +33,8 @@ app.get('/personnes/:id', (req, res) => {
 });
 
 app.get('/voies', (req, res) => {
-    const sql = 'SELECT * FROM Voies';
+    const sql = 'SELECT Voies.*, Personnes.nom, Personnes.prenom FROM Personnes, Voies WHERE ' +
+        'Personnes.idPersonne = Voies.ouvreur';
     db.all(sql, [], (err, rows) => {
         if (err) {
             throw err;
@@ -44,7 +45,7 @@ app.get('/voies', (req, res) => {
 
 app.get('/voies/:id', (req, res) => {
     const sql = 'SELECT Voies.*, Personnes.nom, Personnes.prenom FROM Personnes, Voies WHERE ' +
-        'Personnes.idPersonne = Voies.ouveur AND Voies.idVoie = ?';
+        'Personnes.idPersonne = Voies.ouvreur AND Voies.idVoie = ?';
     db.get(sql, [req.params.id], (err, rows) => {
         if (err) {
             throw err;
