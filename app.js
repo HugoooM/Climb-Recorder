@@ -11,7 +11,7 @@ const db = new sqlite3.Database('./climb.sqlite', (err) => {
     console.log('Connected to the climb database.');
 });
 
-
+//Obtenir toutes les personnes
 app.get('/personnes', (req, res) => {
     const sql = 'SELECT * FROM Personnes';
     db.all(sql, [], (err, rows) => {
@@ -22,6 +22,7 @@ app.get('/personnes', (req, res) => {
     });
 });
 
+//Obtenir les informations d'une personne
 app.get('/personnes/:id', (req, res) => {
     const sql = 'SELECT * FROM Personnes WHERE idPersonne = ?';
     db.get(sql, [req.params.id], (err, row) => {
@@ -32,6 +33,7 @@ app.get('/personnes/:id', (req, res) => {
     });
 });
 
+//Obtenir toutes les voies
 app.get('/voies', (req, res) => {
     const sql = 'SELECT Voies.*, Personnes.nom, Personnes.prenom FROM Personnes, Voies WHERE ' +
         'Personnes.idPersonne = Voies.ouvreur';
@@ -43,6 +45,7 @@ app.get('/voies', (req, res) => {
     });
 });
 
+//Obtenir les informations d'une voie
 app.get('/voies/:id', (req, res) => {
     const sql = 'SELECT Voies.*, Personnes.nom, Personnes.prenom FROM Personnes, Voies WHERE ' +
         'Personnes.idPersonne = Voies.ouvreur AND Voies.idVoie = ?';
@@ -52,6 +55,19 @@ app.get('/voies/:id', (req, res) => {
         }
         res.send(rows);
     });
+});
+
+//Obtenir les voies réalisées par une personne
+app.get('/voies/realisees/:id', (req, res) => {
+    const sql = 'SELECT AFait.*, Voies.secteur, Voies.couleur, Voies.niveau ' +
+        'FROM AFait, Voies WHERE AFait.idVoie = Voies.idVoie AND AFait.idPersonne = ?';
+    db.all(sql, [req.params.id], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.send(rows);
+    });
+
 });
 
 const port = 3000;

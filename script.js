@@ -4,6 +4,7 @@ new Vue({
         personnes: [],
         voies: [],
         personneSelectionnee: null,
+        voieSelectionnee: null,
         tmp: []
     },
     mounted() {
@@ -32,6 +33,11 @@ new Vue({
         selectPersonne: function (personne) {
             this.personneSelectionnee = personne;
             window.location.href = "infoPersonne.html?id=" + personne.idPersonne;
+        },
+
+        selectVoie: function (voie) {
+            this.voieSelectionnee = voie;
+            window.location.href = "infoVoie.html?id=" + voie.idVoie;
         }
     }
 });

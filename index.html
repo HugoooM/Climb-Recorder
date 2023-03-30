@@ -9,9 +9,9 @@
 <body>
 <center>
     <nav class="navMenu">
-        <a href="#">Accueil</a>
-        <a href="#licencies">Licenciés</a>
-        <a href="#voies">Voies</a>
+        <a href="index.html">Accueil</a>
+        <a href="index.html#licencies">Licenciés</a>
+        <a href="index.html#voies">Voies</a>
         <a href="#">Cours</a>
     </nav>
     <div class="separator"></div>
@@ -55,7 +55,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="voie in voies" :key="voie.idVoie" >
+        <tr v-for="voie in voies" :key="voie.idVoie" v-on:click="selectVoie(voie)">
             <td>{{ voie.idVoie }}</td>
             <td>{{voie.secteur}}</td>
             <td>{{ voie.couleur }}</td>

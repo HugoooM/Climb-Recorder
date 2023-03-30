@@ -21,7 +21,6 @@ h1 {
 }
 
 
-
 .table {
     background-color: #ffffff;
     border: 1px solid #dee2e6;
@@ -48,7 +47,7 @@ h1 {
 }
 
 .table tr:hover {
-    background-color: #f2f2f2;
+    background-color: #e8e8e8;
     cursor: pointer;
 }
 
@@ -56,10 +55,6 @@ img {
     max-height: 50px;
     max-width: 50px;
 }
-
-
-
-
 
 
 .navMenu {
@@ -93,3 +88,13 @@ img {
     color: #fddb3a;
 }
 
+.barChart {
+    width: 800px;
+    height: 500px;
+}
+
+.fieldsetInfo {
+    width: 800px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
