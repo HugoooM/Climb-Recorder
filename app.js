@@ -70,6 +70,19 @@ app.get('/voies/realisees/:id', (req, res) => {
 
 });
 
+//Obtenir les 5 dernières voies réalisées par une personne
+app.get('/voies/dernieres/:id', (req, res) => {
+    const sql = 'SELECT AFait.*, Voies.secteur, Voies.couleur, Voies.niveau ' +
+        'FROM AFait, Voies WHERE AFait.idVoie = Voies.idVoie AND AFait.idPersonne = ? LIMIT 5';
+    db.all(sql, [req.params.id], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.send(rows);
+    });
+
+});
+
 const port = 3000;
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

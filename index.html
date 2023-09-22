@@ -33,7 +33,8 @@
         <tbody>
         <tr v-for="personne in personnes" :key="personne.idPersonne" v-on:click="selectPersonne(personne)">
             <td>{{ personne.idPersonne }}</td>
-            <td><img v-bind:src="getNumLicence(personne.numLicence)" :alt="personne.numLicence"></td>
+            <td v-if="personne.numLicence==null"><img src="noLicence.png" alt="personne.numLicence"></td>
+            <td v-else>{{personne.numLicence}}</td>
             <td>{{ personne.nom }}</td>
             <td>{{ personne.prenom }}</td>
             <td><img v-bind:src="getInitiateurIcon(personne.estInitiateur)" alt="Initiateur"></td>
