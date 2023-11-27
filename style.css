@@ -25,7 +25,7 @@ h1 {
     background-color: #ffffff;
     border: 1px solid #dee2e6;
     border-radius: 4px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
     border-collapse: collapse;
 }
@@ -91,10 +91,16 @@ img {
 .barChart {
     width: 800px;
     height: 500px;
+    display: inline-block;
+    margin-right: 5%;
 }
 
 .fieldsetInfo {
     width: 800px;
     margin-top: 25px;
     margin-bottom: 25px;
+}
+
+.space{
+    margin-bottom: 2%;
 }

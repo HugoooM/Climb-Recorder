@@ -72,6 +72,18 @@ new Vue({
 
                     imgElement.alt = 'Aucune voie réalisée';
 
+                    voiesChartDiv.style.position = 'relative';
+
+                    imgElement.style.position = 'absolute';
+                    imgElement.style.top = '50%';
+                    imgElement.style.left = '50%';
+                    imgElement.style.transform = 'translate(-50%, -50%)';
+
+                    pElement.style.position = 'absolute';
+                    pElement.style.top = '60%';
+                    pElement.style.left = '50%';
+                    pElement.style.transform = 'translate(-50%, -50%)';
+
                     voiesChartDiv.appendChild(imgElement);
                     voiesChartDiv.appendChild(pElement);
 
@@ -136,6 +148,18 @@ new Vue({
                     imgElement.src = 'notCheck.png';
 
                     imgElement.alt = 'Aucune voie réalisée';
+
+                    voiesChartDiv.style.position = 'relative';
+
+                    imgElement.style.position = 'absolute';
+                    imgElement.style.top = '50%';
+                    imgElement.style.left = '50%';
+                    imgElement.style.transform = 'translate(-50%, -50%)';
+
+                    pElement.style.position = 'absolute';
+                    pElement.style.top = '60%';
+                    pElement.style.left = '50%';
+                    pElement.style.transform = 'translate(-50%, -50%)';
 
                     voiesChartDiv.appendChild(imgElement);
                     voiesChartDiv.appendChild(pElement);

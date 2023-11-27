@@ -14,7 +14,12 @@ new Vue({
                 this.voie = data;
             });
     },
-    methods: {}
+    methods: {
+        selectPersonne: function (personne) {
+            this.personneSelectionnee = personne;
+            window.location.href = "infoPersonne.html?id=" + personne;
+        }
+    }
 });
 
 

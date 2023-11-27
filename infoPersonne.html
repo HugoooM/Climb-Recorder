@@ -24,26 +24,28 @@
             <p v-if="personne.numLicence!=null">Numéro de licence FFME : {{personne.numLicence}}</p>
             <p>Nom : {{ personne.nom }}</p>
             <p>Prénom : {{ personne.prenom }}</p>
-            <p v-if="personne.estInitiateur==1">Initiateur</p>
+            <p v-if="personne.estInitiateur=1">Initiateur</p>
         </fieldset>
     </div>
 </div>
-<script src="scriptInfoPersonne.js"></script>
+    <script src="scriptInfoPersonne.js"></script>
 
-<fieldset class="barChart">
-    <legend>Nombre de voies par cotation</legend>
-    <div id="voiesChart">
-        <canvas id="nbVoies"></canvas>
-    </div>
-</fieldset>
+    <fieldset class="barChart">
+        <legend>Nombre de voies par cotation</legend>
+        <div id="voiesChart">
+            <canvas id="nbVoies"></canvas>
+        </div>
+    </fieldset>
 
 
-<fieldset class="barChart">
-    <legend>5 dernières voies</legend>
-    <div id="dernieresVoiesChart">
-        <canvas id="dernieresVoies"></canvas>
-    </div>
-</fieldset>
+    <fieldset class="barChart">
+        <legend>5 dernières voies</legend>
+        <div id="dernieresVoiesChart">
+            <canvas id="dernieresVoies"></canvas>
+        </div>
+    </fieldset>
+
+<div class="space"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
