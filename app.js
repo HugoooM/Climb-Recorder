@@ -42,6 +42,14 @@ app.get('/personnes/remove/:id', (req, res) => {
         }
         res.send(row);
     });
+
+    const sql2 = 'DELETE FROM AFait WHERE idPersonne = ?';
+    db.get(sql2, [req.params.id], (err, row) => {
+        if (err) {
+            throw err;
+        }
+        res.send(row);
+    });
 });
 
 //Obtenir toutes les voies
@@ -53,6 +61,17 @@ app.get('/voies', (req, res) => {
             throw err;
         }
         res.send(rows);
+    });
+});
+
+//Supprimer une voie de la base de données
+app.get('/voies/remove/:id', (req, res) => {
+    const sql = 'UPDATE Voies SET estOuverte = 0 WHERE idVoie = ?';
+    db.get(sql, [req.params.id], (err, row) => {
+        if (err) {
+            throw err;
+        }
+        res.send(row);
     });
 });
 
