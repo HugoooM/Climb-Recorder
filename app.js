@@ -56,6 +56,18 @@ app.get('/voies', (req, res) => {
     });
 });
 
+//Obtenir toutes les voies ouvertes
+app.get('/voies/ouvertes', (req, res) => {
+    const sql = 'SELECT Voies.*, Personnes.nom, Personnes.prenom FROM Personnes, Voies WHERE Voies.estOuverte = 1 AND ' +
+        'Personnes.idPersonne = Voies.ouvreur';
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.send(rows);
+    });
+});
+
 //Obtenir les informations d'une voie
 app.get('/voies/:id', (req, res) => {
     const sql = 'SELECT Voies.*, Personnes.nom, Personnes.prenom FROM Personnes, Voies WHERE ' +

@@ -15,7 +15,7 @@ new Vue({
                 this.personnes = data;
             });
 
-        fetch('http://localhost:3000/voies')
+        fetch('http://localhost:3000/voies/ouvertes')
             .then(response => response.json())
             .then(data => {
                 this.voies = data;

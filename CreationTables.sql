@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS 'Voies'
     'couleur' TEXT NOT NULL,
     'niveau'  TEXT NOT NULL,
     'ouvreur'  INTEGER NOT NULL,
+    'estOuverte' INTEGER NOT NULL CHECK (estOuverte IN (0, 1)),
     FOREIGN KEY(ouvreur) REFERENCES Personnes(idPersonne)
 );
 
