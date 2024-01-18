@@ -175,6 +175,15 @@ new Vue({
 
         getNumLicence: function (numLicence) {
             return numLicence ? numLicence : 'noLicence';
+        },
+
+        deletePersonne: function (personne) {
+            fetch(`http://localhost:3000/personnes/remove/${personne}`)
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = "index.html";
+                });
+            window.location.href = "index.html";
         }
     }
 });

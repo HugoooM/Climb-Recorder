@@ -101,6 +101,21 @@ img {
     margin-bottom: 25px;
 }
 
+#delete{
+    background-color : #ff2e2c;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.bin{
+    width: 40px;
+    height: 40px;
+}
+
 .space{
     margin-bottom: 2%;
 }

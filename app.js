@@ -33,6 +33,17 @@ app.get('/personnes/:id', (req, res) => {
     });
 });
 
+//Supprimer une personne de la base de données
+app.get('/personnes/remove/:id', (req, res) => {
+    const sql = 'DELETE FROM Personnes WHERE idPersonne = ?';
+    db.get(sql, [req.params.id], (err, row) => {
+        if (err) {
+            throw err;
+        }
+        res.send(row);
+    });
+});
+
 //Obtenir toutes les voies
 app.get('/voies', (req, res) => {
     const sql = 'SELECT Voies.*, Personnes.nom, Personnes.prenom FROM Personnes, Voies WHERE ' +

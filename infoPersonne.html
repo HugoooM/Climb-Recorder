@@ -25,6 +25,8 @@
             <p>Nom : {{ personne.nom }}</p>
             <p>Prénom : {{ personne.prenom }}</p>
             <p v-if="personne.estInitiateur=1">Initiateur</p>
+
+            <button v-on:click="deletePersonne(personne.idPersonne)" id="delete"><img src="delete.svg" class="bin"></img></button>
         </fieldset>
     </div>
 </div>
