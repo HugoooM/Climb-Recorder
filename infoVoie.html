@@ -20,18 +20,92 @@
     <div class="container">
         <fieldset>
             <legend>Informations de la voie</legend>
-            <p>Identifiant : {{ voie.idVoie }}</p>
+            <p id="idVoie">Identifiant : {{ voie.idVoie }}</p>
             <p>Secteur : {{ voie.secteur }}</p>
             <p>Couleur : {{ voie.couleur }}</p>
-            <p v-if="parseInt(voie.niveau.charAt(0))>6">Cotation : {{ voie.niveau }}<span class="point" style="color: red; font-size: 60px">&#8226;</span></p>
-            <p v-if="[5,6].includes(parseInt(voie.niveau.charAt(0)))">Cotation : {{ voie.niveau }}<span class="point" style="color: orange; font-size: 60px">&#8226;</span></p>
-            <p v-if="parseInt(voie.niveau.charAt(0))<5">Cotation : {{ voie.niveau }}<span class="point" style="color: limegreen; font-size: 60px">&#8226;</span></p>
-            <p v-on:click="selectPersonne(voie.ouvreur)">Ouvreur : {{ voie.prenom }} {{voie.nom}} (Identifiant : {{voie.ouvreur}})</p>
+            <p v-if="parseInt(voie.niveau.charAt(0))>6">Cotation : {{ voie.niveau }}<span class="point"
+                                                                                          style="color: red; font-size: 60px">&#8226;</span>
+            </p>
+            <p v-if="[5,6].includes(parseInt(voie.niveau.charAt(0)))">Cotation : {{ voie.niveau }}<span class="point"
+                                                                                                        style="color: orange; font-size: 60px">&#8226;</span>
+            </p>
+            <p v-if="parseInt(voie.niveau.charAt(0))<5">Cotation : {{ voie.niveau }}<span class="point"
+                                                                                          style="color: limegreen; font-size: 60px">&#8226;</span>
+            </p>
+            <p v-on:click="selectPersonne(voie.ouvreur)">Ouvreur : {{ voie.prenom }} {{voie.nom}} (Identifiant :
+                {{voie.ouvreur}})</p>
 
-            <button v-on:click="deleteVoie(voie.idVoie)" id="delete"><img src="delete.svg" class="bin"></img></button>
+            <div class="buttons">
+                <button v-on:click="deleteVoie(voie.idVoie)" class="buttons" id="delete"><img src="delete.svg"
+                                                                                              class="bin"></img>
+                </button>
+
+                <button class="buttons" id="afficherFormulaireGrimpeur" onclick="afficherFormulaireGrimpeur()"><img
+                        src="done.svg" class="done">
+                </button>
+
+                <!-- Formulaire de création de licence -->
+                <div id="formulaireContainerGrimpeur" style="display: none;" class="form">
+                    <form autocomplete="off" id="formGrimpeur">
+                        <span id="fermerFormulaireVoie" onclick="cacheFormulaireGrimpeur()">&times;</span>
+                        <label for="personnes">Grimpeur :</label>
+                        <select id="personnes" name="personnes">
+                            <!-- Les options seront ajoutées dynamiquement avec JavaScript -->
+                        </select>
+                        <br>
+                        <button type="button" onclick="ajouterGrimpe()">Ajouter</button>
+                    </form>
+                </div>
+            </div>
+
         </fieldset>
     </div>
 </div>
 <script src="scriptInfoVoie.js"></script>
+<script>
+    //hide the form when click on the button afficherFormulaireGrimpeur
+    function afficherFormulaireGrimpeur() {
+        document.getElementById("formulaireContainerGrimpeur").style.display = "block";
+        chargerPersonnes();
+    }
+
+    function cacheFormulaireGrimpeur() {
+        document.getElementById("formulaireContainerGrimpeur").style.display = "none";
+    }
+
+    function chargerPersonnes() {
+        fetch('http://localhost:3000/personnes')
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                // Ajouter les options au menu déroulant
+                var select = document.getElementById('personnes');
+                data.forEach(function (personne) {
+                    var option = document.createElement('option');
+                    option.value = personne.idPersonne;
+                    option.textContent = personne.prenom + ' ' + personne.nom;
+                    select.appendChild(option);
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    function ajouterGrimpe() {
+        // Récupérer les valeurs des champs du formulaire
+        var grimpeur = document.getElementById('personnes').value;
+        var voie = document.getElementById('idVoie').innerHTML.split(" ")[2];
+
+        fetch(`http://localhost:3000/voies/faite/${voie}/${grimpeur}`)
+            .then(response => response.json())
+            .then(data => {
+
+            });
+        window.location.href = "infoVoie.html?id=" + voie;
+    }
+
+</script>
 </body>
 </html>

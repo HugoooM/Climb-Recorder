@@ -131,8 +131,25 @@ app.get('/voies/realisees/:id', (req, res) => {
         }
         res.send(rows);
     });
-
 });
+
+//Marque une voie comme réalisée
+app.get('/voies/faite/:idVoie/:idPersonne', (req, res) =>{
+    const sql = 'INSERT INTO AFait (idPersonne, idVoie, date) VALUES (?, ?, ?)';
+    const date = new Date();
+    var annee = date.getFullYear();
+    var mois = (date.getMonth() + 1).toString().padStart(2, '0'); // Les mois commencent à 0
+    var jour = date.getDate().toString().padStart(2, '0');
+
+    let stringDate = annee + "-" + mois + "-" + jour;
+
+    db.get(sql, [req.params.idPersonne, req.params.idVoie, stringDate], (err, row) => {
+        if (err) {
+            throw err;
+        }
+        res.send(row);
+    });
+})
 
 //Obtenir les 5 dernières voies réalisées par une personne
 app.get('/voies/dernieres/:id', (req, res) => {
