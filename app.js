@@ -22,6 +22,17 @@ app.get('/personnes', (req, res) => {
     });
 });
 
+//Ajouter une personne à la base de données
+app.get('/personnes/add/:numLicence/:nom/:prenom', (req, res) => {
+    const sql = 'INSERT INTO Personnes (numLicence, nom, prenom, estInitiateur) VALUES (?, ?, ?, 0)';
+    db.get(sql, [req.params.numLicence, req.params.nom, req.params.prenom], (err, row) => {
+        if (err) {
+            throw err;
+        }
+        res.send(row);
+    });
+});
+
 //Obtenir les informations d'une personne
 app.get('/personnes/:id', (req, res) => {
     const sql = 'SELECT * FROM Personnes WHERE idPersonne = ?';

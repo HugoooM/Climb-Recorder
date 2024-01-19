@@ -20,6 +20,32 @@
 
 <div id="app" class="container">
     <h2 id="licencies">Liste des licenciés du club :</h2>
+
+    <button id="afficherFormulaireLicencie">Ajouter une licence</button>
+
+    <!-- Formulaire de création de licence -->
+    <div id="formulaireContainerLicence" style="display: none;" class="form">
+        <span id="fermerFormulaireLicence">&times;</span>
+        <form id="formLicence">
+            <!-- Contenu du formulaire -->
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom">
+            <br>
+
+            <label for="prenom">Prénom :</label>
+            <input type="text" id="prenom" name="prenom">
+            <br>
+
+            <label for="numLicence">N° de licence FFME :</label>
+            <input type="number" id="numLicence" name="numLicence">
+            <br>
+
+            <!-- Autres champs du formulaire -->
+            <button type="button" onclick="ajouterLicence()">Ajouter</button>
+            <p id="erreurLicence">Une erreur s'est produite, merci de réessayer.</p>
+        </form>
+    </div>
+
     <table class="table">
         <thead>
         <tr>
@@ -45,10 +71,11 @@
 
 
     <h2 id="voies">Liste des voies du club :</h2>
-    <button id="afficherFormulaire">Afficher le formulaire</button>
-    <!-- Formulaire masqué par défaut -->
-    <div id="formulaireContainer" style="display: none;">
-        <span id="fermerFormulaire">&times;</span>
+
+    <button id="afficherFormulaireVoie">Ajouter une voie</button>
+    <!-- Formulaire de création de voie -->
+    <div id="formulaireContainerVoie" style="display: none;" class="form">
+        <span id="fermerFormulaireVoie">&times;</span>
         <form id="formVoie">
             <!-- Contenu du formulaire -->
             <label for="secteur">Secteur :</label>
@@ -83,7 +110,8 @@
             <br>
 
             <!-- Autres champs du formulaire -->
-            <button type="button" onclick="ajouterVoie()">Envoyer</button>
+            <button type="button" onclick="ajouterVoie()">Ajouter</button>
+            <p id="erreurVoie">Une erreur s'est produite, merci de réessayer.</p>
         </form>
     </div>
 
@@ -138,44 +166,6 @@
             });
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        // Charge la liste des personnes existantes lors du chargement de la page
-        chargerPersonnes();
-    });
-
-    // Récupérer l'élément de la croix de fermeture
-    var fermerFormulaireBtn = document.getElementById('fermerFormulaire');
-
-    // Ajouter un gestionnaire d'événements au clic sur la croix de fermeture
-    fermerFormulaireBtn.addEventListener('click', function () {
-        // Masquer le formulaire
-        formulaireContainer.style.display = 'none';
-    });
-
-    // ... (le reste du code JavaScript pour afficher le formulaire reste inchangé)
-
-    // Récupérer les éléments du DOM
-    var afficherFormulaireBtn = document.getElementById('afficherFormulaire');
-    var formulaireContainer = document.getElementById('formulaireContainer');
-
-    // Ajouter un gestionnaire d'événements au clic sur le bouton
-    afficherFormulaireBtn.addEventListener('click', function () {
-        // Afficher le formulaire en changeant le style du conteneur
-        formulaireContainer.style.display = 'block';
-    });
-
-    // Ajouter un gestionnaire d'événements pour masquer le formulaire lors de son envoi
-    var monFormulaire = document.getElementById('monFormulaire');
-    monFormulaire.addEventListener('submit', function (event) {
-        // Empêcher le comportement par défaut du formulaire (rechargement de la page)
-        event.preventDefault();
-
-        // Masquer le formulaire après l'envoi
-        formulaireContainer.style.display = 'none';
-
-        // Ajouter ici le code pour traiter les données du formulaire si nécessaire
-    });
-
     function ajouterVoie() {
         // Récupérer les valeurs des champs du formulaire
         var secteur = document.getElementById('secteur').value;
@@ -183,13 +173,80 @@
         var difficulte = document.getElementById('difficulte').value;
         var ouvreur = document.getElementById('personnes').value;
 
-        fetch(`http://localhost:3000/voies/add/${secteur}/${couleur}/${difficulte}/${ouvreur}`)
-            .then(response => response.json())
-            .then(data => {
-                window.location.href = "index.html";
-            });
-        window.location.href = "index.html";
+        if (secteur==="" || couleur==="" || difficulte==="" || ouvreur===""){
+            erreurVoie.style.display = "block";
+        }
+        else{
+            fetch(`http://localhost:3000/voies/add/${secteur}/${couleur}/${difficulte}/${ouvreur}`)
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = "index.html";
+                });
+            erreurVoie.style.display = "none";
+            window.location.href = "index.html";
+        }
     }
+
+
+    function ajouterLicence() {
+        // Récupérer les valeurs des champs du formulaire
+        var nom = document.getElementById('nom').value;
+        var prenom = document.getElementById('prenom').value;
+        var licence = document.getElementById('numLicence').value;
+
+        if (nom==="" || prenom==="" || licence===""){
+            erreurLicence.style.display = "block";
+        }
+        else{
+            fetch(`http://localhost:3000/personnes/add/${licence}/${nom}/${prenom}`)
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = "index.html";
+                });
+            erreurLicence.style.display = "none";
+            window.location.href = "index.html";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Charge la liste des personnes existantes lors du chargement de la page
+        chargerPersonnes();
+    });
+
+    var fermerFormulaireVoieBtn = document.getElementById('fermerFormulaireVoie');
+    var erreurVoie = document.getElementById("erreurVoie");
+    var fermerFormulaireLicenceBtn = document.getElementById('fermerFormulaireLicence');
+    var erreurLicence = document.getElementById("erreurLicence");
+    var afficherFormulaireVoieBtn = document.getElementById('afficherFormulaireVoie');
+    var formulaireContainerVoie = document.getElementById('formulaireContainerVoie');
+    var afficherFormulaireLicenceBtn = document.getElementById('afficherFormulaireLicencie');
+    var formulaireContainerLicence = document.getElementById('formulaireContainerLicence');
+
+    // Fermeture des formulaires
+    fermerFormulaireVoieBtn.addEventListener('click', function () {
+        // Masquer le formulaire
+        formulaireContainerVoie.style.display = 'none';
+        erreurVoie.style.display = "none";
+    });
+
+    fermerFormulaireLicenceBtn.addEventListener('click', function () {
+        // Masquer le formulaire
+        formulaireContainerLicence.style.display = 'none';
+        erreurLicence.style.display = "none";
+    });
+
+    // Ouverture des formulaires
+    afficherFormulaireVoieBtn.addEventListener('click', function () {
+        formulaireContainerLicence.style.display = 'none';
+        erreurLicence.style.display = "none";
+        formulaireContainerVoie.style.display = 'block';
+    });
+
+    afficherFormulaireLicenceBtn.addEventListener('click', function () {
+        formulaireContainerVoie.style.display = 'none';
+        erreurVoie.style.display = "none";
+        formulaireContainerLicence.style.display = 'block';
+    });
 
 </script>
 </body>
