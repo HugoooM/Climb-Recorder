@@ -83,7 +83,7 @@
             <br>
 
             <!-- Autres champs du formulaire -->
-            <button type="submit">Envoyer</button>
+            <button type="button" onclick="ajouterVoie()">Envoyer</button>
         </form>
     </div>
 
@@ -102,41 +102,71 @@
             <td>{{ voie.idVoie }}</td>
             <td>{{voie.secteur}}</td>
             <td>{{ voie.couleur }}</td>
-            <td v-if="parseInt(voie.niveau.charAt(0))>6">{{ voie.niveau }}<span class="point" style="color: red; font-size: 60px">&#8226;</span></td>
-            <td v-if="[5,6].includes(parseInt(voie.niveau.charAt(0)))">{{ voie.niveau }}<span class="point" style="color: orange; font-size: 60px">&#8226;</span></td>
-            <td v-if="parseInt(voie.niveau.charAt(0))<5">{{ voie.niveau }}<span class="point" style="color: limegreen; font-size: 60px">&#8226;</span></td>
-            <td>{{voie.prenom}}  {{voie.nom}}</td>
+            <td v-if="parseInt(voie.niveau.charAt(0))>6">{{ voie.niveau }}<span class="point"
+                                                                                style="color: red; font-size: 60px">&#8226;</span>
+            </td>
+            <td v-if="[5,6].includes(parseInt(voie.niveau.charAt(0)))">{{ voie.niveau }}<span class="point"
+                                                                                              style="color: orange; font-size: 60px">&#8226;</span>
+            </td>
+            <td v-if="parseInt(voie.niveau.charAt(0))<5">{{ voie.niveau }}<span class="point"
+                                                                                style="color: limegreen; font-size: 60px">&#8226;</span>
+            </td>
+            <td>{{voie.prenom}} {{voie.nom}}</td>
         </tr>
         </tbody>
     </table>
 </div>
 <script src="script.js"></script>
 <script>
+    function chargerPersonnes() {
+        fetch('http://localhost:3000/personnes')
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                // Ajouter les options au menu déroulant
+                var select = document.getElementById('personnes');
+                data.forEach(function (personne) {
+                    var option = document.createElement('option');
+                    option.value = personne.idPersonne;
+                    option.textContent = personne.prenom + ' ' + personne.nom;
+                    select.appendChild(option);
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Charge la liste des personnes existantes lors du chargement de la page
+        chargerPersonnes();
+    });
+
     // Récupérer l'élément de la croix de fermeture
     var fermerFormulaireBtn = document.getElementById('fermerFormulaire');
 
     // Ajouter un gestionnaire d'événements au clic sur la croix de fermeture
-    fermerFormulaireBtn.addEventListener('click', function() {
+    fermerFormulaireBtn.addEventListener('click', function () {
         // Masquer le formulaire
         formulaireContainer.style.display = 'none';
     });
 
     // ... (le reste du code JavaScript pour afficher le formulaire reste inchangé)
 
-
     // Récupérer les éléments du DOM
     var afficherFormulaireBtn = document.getElementById('afficherFormulaire');
     var formulaireContainer = document.getElementById('formulaireContainer');
 
     // Ajouter un gestionnaire d'événements au clic sur le bouton
-    afficherFormulaireBtn.addEventListener('click', function() {
+    afficherFormulaireBtn.addEventListener('click', function () {
         // Afficher le formulaire en changeant le style du conteneur
         formulaireContainer.style.display = 'block';
     });
 
     // Ajouter un gestionnaire d'événements pour masquer le formulaire lors de son envoi
     var monFormulaire = document.getElementById('monFormulaire');
-    monFormulaire.addEventListener('submit', function(event) {
+    monFormulaire.addEventListener('submit', function (event) {
         // Empêcher le comportement par défaut du formulaire (rechargement de la page)
         event.preventDefault();
 
@@ -145,6 +175,21 @@
 
         // Ajouter ici le code pour traiter les données du formulaire si nécessaire
     });
+
+    function ajouterVoie() {
+        // Récupérer les valeurs des champs du formulaire
+        var secteur = document.getElementById('secteur').value;
+        var couleur = document.getElementById('couleur').value;
+        var difficulte = document.getElementById('difficulte').value;
+        var ouvreur = document.getElementById('personnes').value;
+
+        fetch(`http://localhost:3000/voies/add/${secteur}/${couleur}/${difficulte}/${ouvreur}`)
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = "index.html";
+            });
+        window.location.href = "index.html";
+    }
 
 </script>
 </body>

@@ -75,6 +75,17 @@ app.get('/voies/remove/:id', (req, res) => {
     });
 });
 
+//Ajouter une voie à la base de données
+app.get('/voies/add/:secteur/:couleur/:niveau/:ouvreur', (req, res) => {
+    const sql = 'INSERT INTO Voies (secteur, couleur, niveau, ouvreur, estOuverte) VALUES (?, ?, ?, ?, 1)';
+    db.get(sql, [req.params.secteur, req.params.couleur, req.params.niveau, req.params.ouvreur], (err, row) => {
+        if (err) {
+            throw err;
+        }
+        res.send(row);
+    });
+});
+
 //Obtenir toutes les voies ouvertes
 app.get('/voies/ouvertes', (req, res) => {
     const sql = 'SELECT Voies.*, Personnes.nom, Personnes.prenom FROM Personnes, Voies WHERE Voies.estOuverte = 1 AND ' +
