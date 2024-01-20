@@ -44,6 +44,17 @@ app.get('/personnes/:id', (req, res) => {
     });
 });
 
+//Switch l'état initiateur d'une personne
+app.get('/personnes/switchInitiateur/:id', (req, res) => {
+    const sql = 'UPDATE Personnes SET estInitiateur = NOT estInitiateur WHERE idPersonne = ?';
+    db.get(sql, [req.params.id], (err, row) => {
+        if (err) {
+            throw err;
+        }
+        res.send(row);
+    });
+});
+
 //Supprimer une personne de la base de données
 app.get('/personnes/remove/:id', (req, res) => {
     const sql = 'DELETE FROM Personnes WHERE idPersonne = ?';

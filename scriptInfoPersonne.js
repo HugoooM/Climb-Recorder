@@ -184,6 +184,13 @@ new Vue({
                     window.location.href = "index.html";
                 });
             window.location.href = "index.html";
+        },
+        switchInitiateur: function (personne) {
+            fetch(`http://localhost:3000/personnes/switchInitiateur/${personne}`)
+                .then(response => response.json())
+                .then(data => {
+                });
+            window.location.reload();
         }
     }
 });
