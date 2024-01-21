@@ -72,6 +72,14 @@ app.get('/personnes/remove/:id', (req, res) => {
         }
         res.send(row);
     });
+
+    const sql3 = 'DELETE FROM Voies WHERE ouvreur = ?';
+    db.get(sql3, [req.params.id], (err, row) => {
+        if (err) {
+            throw err;
+        }
+        res.send(row);
+    });
 });
 
 //Obtenir toutes les voies

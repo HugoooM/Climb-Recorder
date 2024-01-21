@@ -12,7 +12,6 @@
         <a href="index.html">Accueil</a>
         <a href="index.html#licencies">Licenciés</a>
         <a href="index.html#voies">Voies</a>
-        <a href="#">Cours</a>
     </nav>
     <div class="separator"></div>
 </center>
@@ -26,27 +25,32 @@
             <p>Prénom : {{ personne.prenom }}</p>
             <p v-if="personne.estInitiateur==1">Initiateur</p>
 
-            <button v-on:click="deletePersonne(personne.idPersonne)" id="delete"><img src="delete.svg" class="bin"></img></button>
-            <button v-on:click="switchInitiateur(personne.idPersonne)" id="switch"><img src="diploma.svg" class="bin"></img></button>
+            <div class="buttons">
+                <button v-on:click="deletePersonne(personne.idPersonne)" id="delete" class="buttons"><img src="delete.svg"
+                                                                                          class="icons"></img></button>
+                <button v-on:click="switchInitiateur(personne.idPersonne)" id="switch" class="buttons"><img src="diploma.svg"
+                                                                                            class="icons"></img>
+                </button>
+            </div>
         </fieldset>
     </div>
 </div>
-    <script src="scriptInfoPersonne.js"></script>
+<script src="scriptInfoPersonne.js"></script>
 
-    <fieldset class="barChart">
-        <legend>Nombre de voies par cotation</legend>
-        <div id="voiesChart">
-            <canvas id="nbVoies"></canvas>
-        </div>
-    </fieldset>
+<fieldset class="barChart">
+    <legend>Nombre de voies par cotation</legend>
+    <div id="voiesChart">
+        <canvas id="nbVoies"></canvas>
+    </div>
+</fieldset>
 
 
-    <fieldset class="barChart">
-        <legend>5 dernières voies</legend>
-        <div id="dernieresVoiesChart">
-            <canvas id="dernieresVoies"></canvas>
-        </div>
-    </fieldset>
+<fieldset class="barChart">
+    <legend>5 dernières voies</legend>
+    <div id="dernieresVoiesChart">
+        <canvas id="dernieresVoies"></canvas>
+    </div>
+</fieldset>
 
 <div class="space"></div>
 
