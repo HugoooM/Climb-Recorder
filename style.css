@@ -10,6 +10,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     height: 100vh;
+    font-family: 'Maven', sans-serif;
 }
 
 .container {
@@ -52,6 +53,10 @@ h1 {
 
 .table tr:hover {
     background-color: #e8e8e8;
+    cursor: pointer;
+}
+
+#ouvreur{
     cursor: pointer;
 }
 
@@ -109,7 +114,7 @@ img {
     width: 45%;
     margin: 1%;
     box-sizing: border-box;
-    max-height: 300px;
+    max-height: 350px;
     overflow: auto;
 
 }
@@ -118,8 +123,8 @@ legend {
     font-weight: bold;
 }
 
-#delete{
-    background-color : #ff2e2c;
+#delete {
+    background-color: #ff2e2c;
     width: 60px;
     height: 60px;
     display: flex;
@@ -129,8 +134,8 @@ legend {
     cursor: pointer;
 }
 
-#switch{
-    background-color : cadetblue;
+#switch {
+    background-color: cadetblue;
     width: 60px;
     height: 60px;
     display: flex;
@@ -140,13 +145,13 @@ legend {
     cursor: pointer;
 }
 
-.buttons{
+.buttons {
     display: flex;
     margin-right: 1%;
 }
 
-#afficherFormulaireGrimpeur{
-    background-color : forestgreen;
+#afficherFormulaireGrimpeur {
+    background-color: forestgreen;
     width: 60px;
     height: 60px;
     display: flex;
@@ -156,12 +161,12 @@ legend {
     cursor: pointer;
 }
 
-.icons{
+.icons {
     width: 40px;
     height: 40px;
 }
 
-.space{
+.space {
     margin-bottom: 2%;
 }
 
@@ -171,11 +176,38 @@ legend {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: white;
+    background-color: whitesmoke;
     padding: 20px;
     border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
     z-index: 1000;
+    box-shadow: none;
+    height: 25%;
+    width: 30%;
+    line-height: 40px;
+    font-size: 18px;
+}
+
+
+.button-form {
+    background-color: #2ea44f;
+    border: 0;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    padding: 6px 16px;
+}
+
+.button-form:focus:not(:focus-visible):not(.focus-visible) {
+    box-shadow: none;
+    outline: none;
+}
+
+.button-form:hover {
+    background-color: #2c974b;
 }
 
 #fermerFormulaireVoie {
@@ -186,9 +218,9 @@ legend {
     cursor: pointer;
 }
 
-#erreurVoie{
+#erreurVoie {
     display: none;
-    color : red;
+    color: red;
 }
 
 #fermerFormulaireLicence {
@@ -199,9 +231,9 @@ legend {
     cursor: pointer;
 }
 
-#erreurLicence{
+#erreurLicence {
     display: none;
-    color : red;
+    color: red;
 }
 
 #fermerFormulaireGrimpeur {

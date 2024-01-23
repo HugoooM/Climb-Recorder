@@ -152,6 +152,24 @@ app.get('/voies/realisees/:id', (req, res) => {
     });
 });
 
+//Obtenir les personnes ayant réalisé une voie
+app.get('/voies/grimpeepar/:id', (req, res) => {
+    const sql = 'SELECT AFait.*, Personnes.*' +
+        'FROM AFait, Personnes WHERE AFait.idPersonne = Personnes.idPersonne AND AFait.idVoie = ?';
+    db.all(sql, [req.params.id], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.send(rows);
+    });
+});
+
+//
+// FROM AFait
+//
+// WHERE AFait.idVoie = ?;
+
+
 //Marque une voie comme réalisée
 app.get('/voies/faite/:idVoie/:idPersonne', (req, res) =>{
     const sql = 'INSERT INTO AFait (idPersonne, idVoie, date) VALUES (?, ?, ?)';

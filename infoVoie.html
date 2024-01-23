@@ -16,8 +16,8 @@
     <div class="separator"></div>
 </center>
 <div id="app">
-    <div class="container">
-        <fieldset>
+    <div class="fieldsets">
+        <fieldset class="fieldsetInfo">
             <legend>Informations de la voie</legend>
             <p id="idVoie">Identifiant : {{ voie.idVoie }}</p>
             <p>Secteur : {{ voie.secteur }}</p>
@@ -31,7 +31,7 @@
             <p v-if="parseInt(voie.niveau.charAt(0))<5">Cotation : {{ voie.niveau }}<span class="point"
                                                                                           style="color: limegreen; font-size: 60px">&#8226;</span>
             </p>
-            <p v-on:click="selectPersonne(voie.ouvreur)">Ouvreur : {{ voie.prenom }} {{voie.nom}} (Identifiant :
+            <p v-on:click="selectPersonne(voie.ouvreur)" id="ouvreur">Ouvreur : {{ voie.prenom }} {{voie.nom}} (Identifiant :
                 {{voie.ouvreur}})</p>
 
             <div class="buttons">
@@ -43,7 +43,7 @@
                         src="done.svg" class="icons">
                 </button>
 
-                <!-- Formulaire de création de licence -->
+                <!-- Formulaire d'ajout de grimpeur -->
                 <div id="formulaireContainerGrimpeur" style="display: none;" class="form">
                     <form autocomplete="off" id="formGrimpeur">
                         <span id="fermerFormulaireVoie" onclick="cacheFormulaireGrimpeur()">&times;</span>
@@ -56,7 +56,27 @@
                     </form>
                 </div>
             </div>
-
+        </fieldset>
+        <fieldset class="fieldsetInfo">
+            <legend>Les grimpeurs</legend>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Identifiant de la personne</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="personne in personne" :key="personne.idPersonne" v-on:click="selectPersonne(personne)">
+                    <td>{{ personne.idPersonne }}</td>
+                    <td>{{ personne.nom }}</td>
+                    <td>{{ personne.prenom }}</td>
+                    <td>{{ personne.date }}</td>
+                </tr>
+                </tbody>
+            </table>
         </fieldset>
     </div>
 </div>

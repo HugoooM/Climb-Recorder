@@ -20,7 +20,7 @@
 <div id="app" class="container">
     <h2 id="licencies">Liste des licenciés du club :</h2>
 
-    <button id="afficherFormulaireLicencie">Ajouter une licence</button>
+    <button id="afficherFormulaireLicencie" class="button-form">Ajouter une licence</button>
 
     <!-- Formulaire de création de licence -->
     <div id="formulaireContainerLicence" style="display: none;" class="form">
@@ -40,7 +40,7 @@
             <br>
 
             <!-- Autres champs du formulaire -->
-            <button type="button" onclick="ajouterLicence()">Ajouter</button>
+            <button type="button" onclick="ajouterLicence()" class="button-form">Ajouter</button>
             <p id="erreurLicence">Une erreur s'est produite, merci de réessayer.</p>
         </form>
     </div>
@@ -71,7 +71,7 @@
 
     <h2 id="voies">Liste des voies du club :</h2>
 
-    <button id="afficherFormulaireVoie">Ajouter une voie</button>
+    <button id="afficherFormulaireVoie" class="button-form">Ajouter une voie</button>
     <!-- Formulaire de création de voie -->
     <div id="formulaireContainerVoie" style="display: none;" class="form">
         <span id="fermerFormulaireVoie">&times;</span>
@@ -109,7 +109,7 @@
             <br>
 
             <!-- Autres champs du formulaire -->
-            <button type="button" onclick="ajouterVoie()">Ajouter</button>
+            <button type="button" onclick="ajouterVoie()" class="button-form">Ajouter</button>
             <p id="erreurVoie">Une erreur s'est produite, merci de réessayer.</p>
         </form>
     </div>
