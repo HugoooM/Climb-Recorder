@@ -142,7 +142,7 @@ app.get('/voies/:id', (req, res) => {
 
 //Obtenir les voies réalisées par une personne
 app.get('/voies/realisees/:id', (req, res) => {
-    const sql = 'SELECT AFait.*, Voies.secteur, Voies.couleur, Voies.niveau ' +
+    const sql = 'SELECT AFait.*, Voies.*' +
         'FROM AFait, Voies WHERE AFait.idVoie = Voies.idVoie AND AFait.idPersonne = ?';
     db.all(sql, [req.params.id], (err, rows) => {
         if (err) {
