@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Informations de la voie</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<center>
+    <nav class="navMenu">
+        <a href="index.html">Accueil</a>
+        <a href="index.html#licencies">Licenciés</a>
+        <a href="index.html#voies">Voies</a>
+        <a href="login.html" id="login">Connexion</a>
+        <a href="signup.html" id="signup">Création d'un compte</a>
+        <button id="logoutButton">Se déconnecter</button>
+    </nav>
+    <div class="separator"></div>
+</center>
+<div id="app">
+    <div class="fieldsets">
+        <fieldset class="fieldsetInfo">
+            <legend>Informations de la voie</legend>
+            <p>Secteur : {{ voie.secteur }}</p>
+            <p>Couleur : {{ voie.couleur }}</p>
+
+            <p v-if="parseInt(voie.cotation.charAt(0))>6">Cotation : {{ voie.cotation }}<span class="point"
+                                                                                              style="color: red; font-size: 60px">&#8226;</span>
+            </p>
+            <p v-if="[5,6].includes(parseInt(voie.cotation.charAt(0)))">Cotation : {{ voie.cotation }}<span
+                    class="point"
+                    style="color: orange; font-size: 60px">&#8226;</span>
+            </p>
+            <p v-if="parseInt(voie.cotation.charAt(0))<5">Cotation : {{ voie.cotation }}<span class="point"
+                                                                                              style="color: limegreen; font-size: 60px">&#8226;</span>
+            </p>
+            <p v-on:click="selectPersonne(voie.ouvreur)" id="ouvreur">Ouvreur :
+                {{voie.nomOuvreur}}</p>
+
+            <button class="buttons" id="afficherFormulaireGrimpeur" onclick="afficherFormulaireGrimpeur()"><img
+                    src="assets/done.svg" class="icons">
+            </button>
+
+            <!-- Formulaire d'ajout de grimpeur -->
+            <div id="formulaireContainerGrimpeur" style="display: none;" class="form">
+                <form autocomplete="off" id="formGrimpeur">
+                    <span id="fermerFormulaireVoie" onclick="cacheFormulaireGrimpeur()">&times;</span>
+                    <label for="date">Date :</label>
+                    <input type="date" id="date"><br>
+                    <label for="comment">Commentaire :</label><br>
+                    <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+                    <br>
+                    <button type="button" onclick="ajouterGrimpe()" class="button-form">Ajouter</button>
+                </form>
+            </div>
+        </fieldset>
+        <fieldset class="fieldsetInfo">
+            <legend>Les grimpeurs</legend>
+            <table v-if="grimpes.length>0"  class="table">
+                <thead>
+                <tr>
+                    <th>Identifiant de la personne</th>
+                    <th>Date</th>
+                    <th>Commentaire</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="grimpe in grimpes" :key="grimpe._id" v-on:click="selectGrimpeur(grimpe)">
+                    <td>{{ grimpe.nomGrimpeur }}</td>
+                    <td>{{ formatDate(grimpe.date) }}</td>
+                    <td>{{ grimpe.commentaire }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <p v-else v-if="grimpes.length===0">Aucune données disponibles.</p>
+        </fieldset>
+    </div>
+</div>
+<script src="scriptInfoVoie.js"></script>
+<script>
+
+    function afficherFormulaireGrimpeur() {
+        document.getElementById("formulaireContainerGrimpeur").style.display = "block";
+        const date = new Date();
+        var month = date.getMonth() + 1;
+        if (month < 9)
+            month = "0" + month;
+        const stringDate = date.getFullYear() + '-' + month + '-' + date.getDate();
+        document.getElementById("date").value = stringDate;
+    }
+
+    function cacheFormulaireGrimpeur() {
+        document.getElementById("formulaireContainerGrimpeur").style.display = "none";
+    }
+
+    function ajouterGrimpe() {
+        // Récupérer les valeurs des champs du formulaire
+        //const token = localStorage.getItem('token');
+
+        fetch('http://localhost:3000/api/auth/profile', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.user = data.user;
+
+                // Récupérer les valeurs des champs du formulaire
+                var comment = document.getElementById('comment').value;
+                var date = document.getElementById('date').value;
+                const idVoie = new URLSearchParams(window.location.search).get('id');
+
+                const dataToSend = {
+                    grimpeur : this.user._id,
+                    voie: idVoie,
+                    date:date,
+                    commentaire: comment
+                };
+
+
+                const token = localStorage.getItem('token');
+
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dataToSend)
+                };
+
+
+                fetch('http://localhost:3000/api/grimpe', requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data); // Traitement des données reçues de l'API
+                        cacheFormulaireGrimpeur(); // Exécution de la fonction après l'appel API
+                        location.reload(); // Rechargement de la page après l'appel API
+                    })
+            })
+            .catch(error => console.error('Erreur lors de la requête:', error));
+
+
+    }
+
+</script>
+<script>
+    // Vérifier si un token est présent dans le localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+        // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+        window.location.href = 'login.html';
+    }
+
+    document.getElementById('login').addEventListener('click', function () {
+        localStorage.removeItem('token');
+    });
+
+    document.getElementById('signup').addEventListener('click', function () {
+        localStorage.removeItem('token');
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', function () {
+        // Supprimer le token JWT stocké dans le localStorage
+        localStorage.removeItem('token');
+
+        // Rediriger l'utilisateur vers la page de connexion
+        window.location.href = 'login.html';
+    });
+
+
+</script>
+</body>
+</html>

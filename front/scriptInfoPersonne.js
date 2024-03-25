@@ -2,19 +2,142 @@ new Vue({
     el: '#app',
     data: {
         personne: [],
-        voies: []
+        voies: [],
+        grimpes: []
     },
     mounted() {
         // Récupérer l'identifiant de la personne depuis l'URL
         const idPersonne = new URLSearchParams(window.location.search).get('id');
-
+        const token = localStorage.getItem('token');
         // Appel de l'API pour récupérer les informations de la personne correspondante
-        fetch(`http://localhost:3000/personnes/${idPersonne}`)
-            .then(response => response.json())
-            .then(data => {
-                this.personne = data;
-            });
+        fetch('http://localhost:3000/api/auth/' + idPersonne, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response =>response.json())
+            .then(data => this.personne = data)
+            .catch(error => console.error('Erreur lors de la requête:', error));
 
+        async function fetchData() {
+            try {
+                const response = await fetch(`http://localhost:3000/api/grimpe/user/` + idPersonne, {
+                    method: 'GET',
+                    headers:{
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                this.grimpes = data;
+            } catch (error) {
+                console.error('Erreur lors de la requête:', error);
+            }
+        }
+
+        fetchData.call(this).then(() => {
+            if (this.grimpes.length>0){
+                const ctx = document.getElementById("nbVoies");
+                const nbVoies = [0, 0, 0, 0, 0, 0];
+
+                for (let i = 0; i < this.grimpes.length; i++) {
+                    if (parseInt(this.grimpes[i].voie.cotation.charAt(0)) < 5 || this.grimpes[i].voie.cotation === '5a') {
+                        nbVoies[0]++;
+                    } else if (this.grimpes[i].voie.cotation === '5b') {
+                        nbVoies[1]++;
+                    } else if (this.grimpes[i].voie.cotation === '5c') {
+                        nbVoies[2]++;
+                    } else if (this.grimpes[i].voie.cotation === '6a') {
+                        nbVoies[3]++;
+                    } else if (this.grimpes[i].voie.cotation === '6b') {
+                        nbVoies[4]++;
+                    } else if (parseInt(this.grimpes[i].voie.cotation.charAt(0)) > 6 || this.grimpes[i].voie.cotation === '6c') {
+                        nbVoies[5]++;
+                    }
+                }
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['≤5a', '5b', '5c', '6a', '6b', '≥6c'],
+                        datasets: [{
+                            label: 'Nombre de voies par cotation',
+                            data: nbVoies,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+            else{
+                const voiesChartDiv = document.getElementById('voiesChart');
+                const pElement = document.createElement('p');
+
+                pElement.textContent = 'Aucune voie réalisée.';
+                voiesChartDiv.appendChild(pElement);
+            }
+
+
+            if (this.grimpes.length>0){
+                const ctx = document.getElementById("dernieresVoies");
+                const nbVoies = [0, 0, 0, 0, 0, 0];
+                for (let i = this.grimpes.length-1; i > this.grimpes.length - 6 && i>=0; i--) {
+
+                    if (parseInt(this.grimpes[i].voie.cotation.charAt(0)) < 5 || this.grimpes[i].voie.cotation === '5a') {
+                        nbVoies[0]++;
+                    } else if (this.grimpes[i].voie.cotation === '5b') {
+                        nbVoies[1]++;
+                    } else if (this.grimpes[i].voie.cotation === '5c') {
+                        nbVoies[2]++;
+                    } else if (this.grimpes[i].voie.cotation === '6a') {
+                        nbVoies[3]++;
+                    } else if (this.grimpes[i].voie.cotation === '6b') {
+                        nbVoies[4]++;
+                    } else if (parseInt(this.grimpes[i].voie.cotation.charAt(0)) > 6 || this.grimpes[i].voie.cotation === '6c') {
+                        nbVoies[5]++;
+                    }
+                }
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['≤5a', '5b', '5c', '6a', '6b', '≥6c'],
+                        datasets: [{
+                            label: 'Nombre de voies par cotation',
+                            data: nbVoies,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+            else{
+                const voiesChartDiv = document.getElementById('dernieresVoiesChart');
+                const pElement = document.createElement('p');
+
+                pElement.textContent = 'Aucune voie réalisée.';
+                voiesChartDiv.appendChild(pElement);
+            }
+
+        })
+
+
+
+
+        /*
         fetch(`http://localhost:3000/voies/dernieres/${idPersonne}`)
             .then(response => response.json())
             .then(data => {
@@ -165,7 +288,7 @@ new Vue({
 
                 }
 
-            });
+            });*/
     },
     methods: {
         getInitiateurIcon: function (estInitiateur) {
@@ -185,11 +308,20 @@ new Vue({
             window.location.href = "index.html";
         },
         switchInitiateur: function (personne) {
-            fetch(`http://localhost:3000/personnes/switchInitiateur/${personne}`)
+            fetch('http://localhost:3000/api/auth/initiateur/' + personne, {
+                method: 'PUT',
+                headers:{
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            })
                 .then(response => response.json())
-                .then(data => {
-                });
+                .then(data => console.log(data))
+                .catch(error => console.error('Erreur lors de la requête:', error));
             window.location.reload();
+        },
+        selectVoie: function (voie) {
+            window.location.href = "infoVoie.html?id=" + voie;
         }
     }
 });

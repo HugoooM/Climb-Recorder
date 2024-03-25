@@ -13,6 +13,10 @@ body {
     font-family: 'Maven', sans-serif;
 }
 
+textarea{
+    resize: none;
+}
+
 .container {
     margin-top: 50px;
     padding-left: 100px;
@@ -242,4 +246,8 @@ legend {
     right: 10px;
     font-size: 20px;
     cursor: pointer;
+}
+
+#comment{
+    width: 100%;
 }

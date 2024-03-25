@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Informations personnelles</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<center>
+    <nav class="navMenu">
+        <a href="index.html">Accueil</a>
+        <a href="index.html#licencies">Licenciés</a>
+        <a href="index.html#voies">Voies</a>
+        <a href="login.html" id="login">Connexion</a>
+        <a href="signup.html" id="signup">Création d'un compte</a>
+        <button id="logoutButton">Se déconnecter</button>
+    </nav>
+    <div class="separator"></div>
+</center>
+<div id="app">
+    <div class="fieldsets">
+        <fieldset class="fieldsetInfo">
+            <legend>Informations de la personne</legend>
+            <p v-if="personne.licence!=null">Numéro de licence FFME : {{personne.licence}}</p>
+            <p>Nom : {{ personne.name }}</p>
+            <p>Prénom : {{ personne.firstname }}</p>
+            <p>Mail : {{personne.email}}</p>
+            <p v-if="personne.initiateur==true">Initiateur</p>
+
+            <div class="buttons">
+                <button v-on:click="switchInitiateur(personne._id)" id="switch" class="buttons"><img
+                        src="assets/diploma.svg"
+                        class="icons"></img>
+                </button>
+            </div>
+        </fieldset>
+
+        <fieldset class="fieldsetInfo">
+            <legend>Dernières voies grimpées</legend>
+            <table v-if="grimpes.length>0" class="table">
+                <thead>
+                <tr>
+                    <th>Secteur</th>
+                    <th>Couleur</th>
+                    <th>Cotation</th>
+                    <th>Date</th>
+                    <th>Commentaire</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="grimpe in grimpes" :key="grimpe._id" v-on:click="selectVoie(grimpe.voie._id)">
+                    <td>{{ grimpe.voie.secteur }}</td>
+                    <td>{{ grimpe.voie.couleur }}</td>
+                    <td v-if="parseInt(grimpe.voie.cotation.charAt(0))>6">{{ grimpe.voie.cotation }}<span class="point"
+                                                                                            style="color: red; font-size: 60px">&#8226;</span>
+                    </td>
+                    <td v-if="[5,6].includes(parseInt(grimpe.voie.cotation.charAt(0)))">{{ grimpe.voie.cotation }}<span class="point"
+                                                                                                          style="color: orange; font-size: 60px">&#8226;</span>
+                    </td>
+                    <td v-if="parseInt(grimpe.voie.cotation.charAt(0))<5">{{ grimpe.voie.cotation }}<span class="point"
+                                                                                            style="color: limegreen; font-size: 60px">&#8226;</span>
+                    </td>
+                    <td>{{ new Date(grimpe.date).toLocaleDateString('fr-FR') }}</td>
+                    <td>{{ grimpe.commentaire }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <p v-else v-if="grimpes.length===0">Aucune données disponibles.</p>
+        </fieldset>
+
+    </div>
+</div>
+<script src="scriptInfoPersonne.js"></script>
+
+<div class="fieldsets">
+    <fieldset class="barChart">
+        <legend>Nombre de voies par cotation</legend>
+        <div id="voiesChart">
+            <canvas id="nbVoies"></canvas>
+        </div>
+    </fieldset>
+
+
+    <fieldset class="barChart">
+        <legend>5 dernières voies</legend>
+        <div id="dernieresVoiesChart">
+            <canvas id="dernieresVoies"></canvas>
+        </div>
+    </fieldset>
+</div>
+<div class="space"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+
+<script>
+    // Vérifier si un token est présent dans le localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+        // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+        window.location.href = 'login.html';
+    }
+
+    document.getElementById('login').addEventListener('click', function () {
+        localStorage.removeItem('token');
+    });
+
+    document.getElementById('signup').addEventListener('click', function () {
+        localStorage.removeItem('token');
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', function () {
+        // Supprimer le token JWT stocké dans le localStorage
+        localStorage.removeItem('token');
+
+        // Rediriger l'utilisateur vers la page de connexion
+        window.location.href = 'login.html';
+    });
+</script>
+</html>
