@@ -77,9 +77,11 @@
             <br>
 
             <label for="personnes">Ouvreur :</label>
-            <select id="personnes" name="personnes">
-                <!-- Les options seront ajoutées dynamiquement avec JavaScript -->
-            </select>
+            <select id="personnes" name="personnes"></select>
+            <br>
+
+            <label for="image">Photo (optionnel) :</label> <br>
+            <input type="file" id="image" name="image" accept="image/png, image/jpeg"/>
             <br>
 
             <button type="button" onclick="ajouterVoie()" class="button-form">Ajouter</button>
@@ -175,6 +177,7 @@
         var couleur = document.getElementById('couleur').value;
         var cotation = document.getElementById('difficulte').value;
         var ouvreur = document.getElementById('personnes').value;
+        const image = document.getElementById('image').files[0];
 
         if (secteur === "" || couleur === "" || difficulte === "" || ouvreur === "") {
             erreurVoie.style.display = "block";
@@ -187,6 +190,7 @@
                 cotation: cotation,
                 commentaire: 'COMMENTAIRE'
             }));
+            formData.append('image', image);
 
             const token = localStorage.getItem('token');
 

@@ -22,6 +22,7 @@
     <div class="fieldsets">
         <fieldset class="fieldsetInfo">
             <legend>Informations de la voie</legend>
+            <div class="column">
             <p>Secteur : {{ voie.secteur }}</p>
             <p>Couleur : {{ voie.couleur }}</p>
 
@@ -37,6 +38,11 @@
             </p>
             <p v-on:click="selectPersonne(voie.ouvreur)" id="ouvreur">Ouvreur :
                 {{voie.nomOuvreur}}</p>
+            </div>
+            <div v-if="voie.imageUrl != null" class="divImgVoie column">
+                <img :src="'images/' + voie.imageUrl" alt="Image de la voie" class="imgVoie">
+            </div>
+
 
             <button class="buttons" id="afficherFormulaireGrimpeur" onclick="afficherFormulaireGrimpeur()"><img
                     src="assets/done.svg" class="icons">
@@ -57,7 +63,7 @@
         </fieldset>
         <fieldset class="fieldsetInfo">
             <legend>Les grimpeurs</legend>
-            <table v-if="grimpes.length>0"  class="table">
+            <table v-if="grimpes.length>0" class="table">
                 <thead>
                 <tr>
                     <th>Identifiant de la personne</th>
@@ -115,9 +121,9 @@
                 const idVoie = new URLSearchParams(window.location.search).get('id');
 
                 const dataToSend = {
-                    grimpeur : this.user._id,
+                    grimpeur: this.user._id,
                     voie: idVoie,
-                    date:date,
+                    date: date,
                     commentaire: comment
                 };
 

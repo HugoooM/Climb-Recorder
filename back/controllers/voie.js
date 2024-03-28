@@ -1,16 +1,17 @@
 const Voie = require('../models/Voie');
 const fs = require('fs');
-const User = require("../models/User");
 
 exports.createVoie = (req, res, next) => {
     const voieObject = req.body.voie;
     var json = JSON.parse(voieObject);
-
     const voie = new Voie({
         ...json,
-        //ouvreur : req.auth.userId,
-        //imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
+
+    if (req.file) {
+        voie.imageUrl = `${req.file.filename}`;
+    }
+
 
     voie.save()
         .then(() => {res.status(201).json({message:'Voie enregistrée !'})})

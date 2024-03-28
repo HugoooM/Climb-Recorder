@@ -64,10 +64,7 @@ h1 {
     cursor: pointer;
 }
 
-img {
-    max-height: 50px;
-    max-width: 50px;
-}
+
 
 
 .navMenu {
@@ -172,6 +169,23 @@ legend {
 
 .space {
     margin-bottom: 2%;
+}
+
+.divImgVoie{
+    height: 100%;
+    position: relative;
+}
+
+.imgVoie{
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.column{
+    float: left;
+    width: 50%;
+    box-sizing: border-box;
 }
 
 /* Style du formulaire container */
