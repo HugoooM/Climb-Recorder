@@ -162,9 +162,25 @@ legend {
     cursor: pointer;
 }
 
+#suprVoie{
+    background-color: #ff2e2c;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
 .icons {
     width: 40px;
     height: 40px;
+    display: inline-block;
+}
+
+.buttonsRow{
+    display: flex;
 }
 
 .space {
@@ -188,6 +204,10 @@ legend {
     box-sizing: border-box;
 }
 
+.buttonsRow{
+
+}
+
 /* Style du formulaire container */
 .form {
     position: fixed;
@@ -204,6 +224,10 @@ legend {
     width: 30%;
     line-height: 40px;
     font-size: 18px;
+}
+
+#formulaireContainerVoie{
+    height: 30%;
 }
 
 

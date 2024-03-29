@@ -1,5 +1,7 @@
 const Voie = require('../models/Voie');
+const Grimpe = require('../models/Grimpe');
 const fs = require('fs');
+const path = require('path');
 
 exports.createVoie = (req, res, next) => {
     const voieObject = req.body.voie;
@@ -57,22 +59,38 @@ exports.modifyVoie = (req, res, next) => {
 };
 
 exports.deleteVoie = (req, res, next) => {
-    Voie.findOne(({_id: req.params.id}))
-        .then(thing => {
-            if (voie.ouvreur != req.auth.userId){
-                res.status(401).json({message:'Not authorized'});
-            } else{
-                const filename = voie.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {
-                    Voie.deleteOne({_id:req.params.id})
-                        .then(() => {res.status(200).json({message: 'Objet supprimé !'})})
-                        .catch(onerror => res.status(401).json({error}));
+    const userId = req.body.user;
+
+    Voie.findOne({_id: req.params.id})
+        .then(voie => {
+            if (!voie) {
+                return res.status(404).json({message: "Voie non trouvée"});
+            }
+
+            if (voie.ouvreur.toString() !== userId) {
+                return res.status(403).json({message: "Non autorisé à supprimer cette voie"});
+            }
+
+            if (voie.imageUrl) {
+                const imagePath = path.join(__dirname, `../../front/images/${voie.imageUrl}`);
+                fs.unlink(imagePath, (err) => {
+                    if (err) {
+                        console.error("Erreur lors de la suppression du fichier image :", err);
+                    }
                 });
             }
+
+            Voie.deleteOne({_id: req.params.id})
+                .then(() => {
+                    res.status(200).json({message: "Voie supprimée avec succès"});
+                })
+                .catch(error => {
+                    res.status(500).json({error: error.message});
+                });
         })
         .catch(error => {
-            res.status(500).json({error});
-        })
+            res.status(500).json({error: error.message});
+        });
 };
 
 exports.getAllVoie = (req, res, next) => {

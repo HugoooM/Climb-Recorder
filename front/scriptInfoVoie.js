@@ -91,12 +91,26 @@ new Vue({
             window.location.href = "infoPersonne.html?id=" + personne;
         },
         deleteVoie: function (voie) {
+            const idVoie = new URLSearchParams(window.location.search).get('id');
+            const token = localStorage.getItem('token');
+            console.log("deleteVoie");
+            fetch('http://localhost:3000/api/voies/' + idVoie, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => this.personnes = data)
+                .catch(error => console.error('Erreur lors de la requête:', error));
+            /*
             fetch(`http://localhost:3000/voies/remove/${voie}`)
                 .then(response => response.json())
                 .then(data => {
                     window.location.href = "index.html";
                 });
-            window.location.href = "index.html";
+            window.location.href = "index.html";*/
         },
         formatDate : function (dateString){
             const date = new Date(dateString);

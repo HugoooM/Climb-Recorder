@@ -23,30 +23,34 @@
         <fieldset class="fieldsetInfo">
             <legend>Informations de la voie</legend>
             <div class="column">
-            <p>Secteur : {{ voie.secteur }}</p>
-            <p>Couleur : {{ voie.couleur }}</p>
+                <p>Secteur : {{ voie.secteur }}</p>
+                <p>Couleur : {{ voie.couleur }}</p>
 
-            <p v-if="parseInt(voie.cotation.charAt(0))>6">Cotation : {{ voie.cotation }}<span class="point"
-                                                                                              style="color: red; font-size: 60px">&#8226;</span>
-            </p>
-            <p v-if="[5,6].includes(parseInt(voie.cotation.charAt(0)))">Cotation : {{ voie.cotation }}<span
-                    class="point"
-                    style="color: orange; font-size: 60px">&#8226;</span>
-            </p>
-            <p v-if="parseInt(voie.cotation.charAt(0))<5">Cotation : {{ voie.cotation }}<span class="point"
-                                                                                              style="color: limegreen; font-size: 60px">&#8226;</span>
-            </p>
-            <p v-on:click="selectPersonne(voie.ouvreur)" id="ouvreur">Ouvreur :
-                {{voie.nomOuvreur}}</p>
+                <p v-if="parseInt(voie.cotation.charAt(0))>6">Cotation : {{ voie.cotation }}<span class="point"
+                                                                                                  style="color: red; font-size: 60px">&#8226;</span>
+                </p>
+                <p v-if="[5,6].includes(parseInt(voie.cotation.charAt(0)))">Cotation : {{ voie.cotation }}<span
+                        class="point"
+                        style="color: orange; font-size: 60px">&#8226;</span>
+                </p>
+                <p v-if="parseInt(voie.cotation.charAt(0))<5">Cotation : {{ voie.cotation }}<span class="point"
+                                                                                                  style="color: limegreen; font-size: 60px">&#8226;</span>
+                </p>
+                <p v-on:click="selectPersonne(voie.ouvreur)" id="ouvreur">Ouvreur :
+                    {{voie.nomOuvreur}}</p>
+
+                <div class="buttonsRow">
+                    <button class="buttons" id="afficherFormulaireGrimpeur" onclick="afficherFormulaireGrimpeur()"><img
+                            src="assets/done.svg" class="icons">
+                    </button>
+                    <button class="buttons" id="suprVoie" onclick="suprVoie()"><img
+                            src="assets/delete.svg" class="icons">
+                    </button>
+                </div>
             </div>
             <div v-if="voie.imageUrl != null" class="divImgVoie column">
                 <img :src="'images/' + voie.imageUrl" alt="Image de la voie" class="imgVoie">
             </div>
-
-
-            <button class="buttons" id="afficherFormulaireGrimpeur" onclick="afficherFormulaireGrimpeur()"><img
-                    src="assets/done.svg" class="icons">
-            </button>
 
             <!-- Formulaire d'ajout de grimpeur -->
             <div id="formulaireContainerGrimpeur" style="display: none;" class="form">
@@ -85,7 +89,6 @@
 </div>
 <script src="scriptInfoVoie.js"></script>
 <script>
-
     function afficherFormulaireGrimpeur() {
         document.getElementById("formulaireContainerGrimpeur").style.display = "block";
         const date = new Date();
@@ -100,10 +103,45 @@
         document.getElementById("formulaireContainerGrimpeur").style.display = "none";
     }
 
-    function ajouterGrimpe() {
-        // Récupérer les valeurs des champs du formulaire
-        //const token = localStorage.getItem('token');
+    function suprVoie(){
+        fetch('http://localhost:3000/api/auth/profile', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.user = data.user;
 
+                const idVoie = new URLSearchParams(window.location.search).get('id');
+
+                const dataToSend = {
+                    user: this.user._id,
+                };
+
+                const token = localStorage.getItem('token');
+
+                const requestOptions = {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dataToSend)
+                };
+
+                fetch('http://localhost:3000/api/voies/' + idVoie, requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        window.location.href ='index.html';
+                    })
+            })
+            .catch(error => console.error('Erreur lors de la requête:', error));
+    }
+
+    function ajouterGrimpe() {
         fetch('http://localhost:3000/api/auth/profile', {
             method: 'GET',
             headers: {
@@ -143,14 +181,11 @@
                 fetch('http://localhost:3000/api/grimpe', requestOptions)
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data); // Traitement des données reçues de l'API
-                        cacheFormulaireGrimpeur(); // Exécution de la fonction après l'appel API
-                        location.reload(); // Rechargement de la page après l'appel API
+                        cacheFormulaireGrimpeur();
+                        location.reload();
                     })
             })
             .catch(error => console.error('Erreur lors de la requête:', error));
-
-
     }
 
 </script>
