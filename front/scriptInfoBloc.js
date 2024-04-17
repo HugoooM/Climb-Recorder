@@ -1,15 +1,15 @@
 new Vue({
     el: '#app',
     data: {
-        voie: [],
+        bloc: [],
         personne: [],
-        grimpes: []
+        grimpesBloc: []
     },
     mounted() {
-        const idVoie = new URLSearchParams(window.location.search).get('id');
+        const idBloc = new URLSearchParams(window.location.search).get('id');
         const token = localStorage.getItem('token');
 
-        fetch('http://localhost:3000/api/voies/' + idVoie, {
+        fetch('http://localhost:3000/api/blocs/' + idBloc, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + token,
@@ -34,7 +34,7 @@ new Vue({
 
                 Promise.all(promises)
                     .then(() => {
-                        this.voie = data;
+                        this.bloc = data;
                     });
             })
             .catch(error => console.error('Erreur lors de la requête:', error));
@@ -59,7 +59,7 @@ new Vue({
 
         async function fetchDataAndAssignNames() {
             try {
-                const response = await fetch('http://localhost:3000/api/grimpe/voie/' + idVoie, {
+                const response = await fetch('http://localhost:3000/api/grimpeBloc/bloc/' + idBloc, {
                     method: 'GET',
                     headers: {
                         'Authorization': 'Bearer ' + token,
@@ -75,7 +75,7 @@ new Vue({
                     grimpe.nomGrimpeur = await getName(grimpe.grimpeur);
                 }));
 
-                this.grimpes = data;
+                this.grimpesBloc = data;
             } catch (error) {
                 console.error('Erreur lors de la requête:', error);
             }
@@ -90,10 +90,10 @@ new Vue({
             this.personneSelectionnee = personne;
             window.location.href = "infoPersonne.html?id=" + personne;
         },
-        deleteVoie: function (voie) {
-            const idVoie = new URLSearchParams(window.location.search).get('id');
+        deleteBloc: function (voie) {
+            const idBloc = new URLSearchParams(window.location.search).get('id');
             const token = localStorage.getItem('token');
-            fetch('http://localhost:3000/api/voies/' + idVoie, {
+            fetch('http://localhost:3000/api/blocs/' + idBloc, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': 'Bearer ' + token,
@@ -112,8 +112,8 @@ new Vue({
 
             return `${day}/${month}/${year}`;
         },
-        selectGrimpeur: function (grimpe) {
-            window.location.href = "infoPersonne.html?id=" + grimpe.grimpeur;
+        selectGrimpeur: function (grimpeBloc) {
+            window.location.href = "infoPersonne.html?id=" + grimpeBloc.grimpeur;
         }
     }
 });

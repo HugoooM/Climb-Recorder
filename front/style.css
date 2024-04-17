@@ -162,7 +162,7 @@ legend {
     cursor: pointer;
 }
 
-#suprVoie{
+#supr{
     background-color: #ff2e2c;
     width: 60px;
     height: 60px;
@@ -230,6 +230,10 @@ legend {
     height: 30%;
 }
 
+#formulaireContainerBloc{
+    height: 30%;
+}
+
 
 .button-form {
     background-color: #2ea44f;
@@ -260,7 +264,20 @@ legend {
     cursor: pointer;
 }
 
+#fermerFormulaireBloc {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
 #erreurVoie {
+    display: none;
+    color: red;
+}
+
+#erreurBloc {
     display: none;
     color: red;
 }

@@ -7,6 +7,8 @@ const voieRoutes = require('./routes/voie');
 const stuffRoutes = require('./routes/stuff');
 const userRoutes = require('./routes/user');
 const grimpeRoutes = require('./routes/grimpe');
+const grimpeBlocRoutes = require('./routes/grimpeBloc');
+const blocRoutes = require('./routes/bloc');
 const path = require('path');
 
 // URL de connexion à la base de données locale
@@ -33,6 +35,8 @@ app.use('/api/stuff', stuffRoutes);
 app.use('/api/voies', voieRoutes);
 app.use('/api/grimpe', grimpeRoutes);
 app.use('/api/auth', userRoutes);
+app.use('/api/blocs', blocRoutes);
+app.use('/api/grimpeBloc', grimpeBlocRoutes);
 
 
 module.exports = app;

@@ -3,6 +3,7 @@ new Vue({
     data: {
         personnes: [],
         voies: [],
+        blocs: [],
         personneSelectionnee: null,
         voieSelectionnee: null,
         tmp: []
@@ -53,13 +54,45 @@ new Vue({
             })
             .catch(error => console.error('Erreur lors de la requête:', error));
 
+        fetch('http://localhost:3000/api/blocs', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                const promises = [];
+                data.forEach((bloc, index) => {
+                    const request = fetch('http://localhost:3000/api/auth/' + bloc.ouvreur, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data2 => {
+                            data[index].nomOuvreur = data2.name + ' ' + data2.firstname;
+                        });
+                    promises.push(request);
+                });
+
+                Promise.all(promises)
+                    .then(() => {
+                        this.blocs = data;
+                    });
+            })
+            .catch(error => console.error('Erreur lors de la requête:', error));
+
     },
     methods: {
-        getInitiateurIcon: function(estInitiateur) {
+        getInitiateurIcon: function (estInitiateur) {
             return estInitiateur ? 'check.png' : 'notCheck.png';
         },
 
-        getNumLicence: function(numLicence) {
+        getNumLicence: function (numLicence) {
             return numLicence ? numLicence : 'noLicence.png';
         },
 
@@ -71,6 +104,10 @@ new Vue({
         selectVoie: function (voie) {
             this.voieSelectionnee = voie;
             window.location.href = "infoVoie.html?id=" + voie._id;
+        },
+        selectBloc: function (bloc) {
+            this.voieSelectionnee = bloc;
+            window.location.href = "infoBloc.html?id=" + bloc._id;
         }
     }
 });

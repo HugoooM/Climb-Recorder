@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Informations de la voie</title>
+    <title>Informations du bloc</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -19,37 +19,38 @@
     <div class="separator"></div>
 </center>
 <div id="app">
+
     <div class="fieldsets">
         <fieldset class="fieldsetInfo">
-            <legend>Informations de la voie</legend>
+            <legend>Informations du bloc</legend>
             <div class="column">
-                <p>Secteur : {{ voie.secteur }}</p>
-                <p>Couleur : {{ voie.couleur }}</p>
+                <p>Secteur : {{ bloc.secteur }}</p>
+                <p>Couleur : {{ bloc.couleur }}</p>
 
-                <p v-if="parseInt(voie.cotation.charAt(0))>6">Cotation : {{ voie.cotation }}<span class="point"
+                <p v-if="parseInt(bloc.cotation.charAt(0))>6">Cotation : {{ bloc.cotation }}<span class="point"
                                                                                                   style="color: red; font-size: 60px">&#8226;</span>
                 </p>
-                <p v-if="[5,6].includes(parseInt(voie.cotation.charAt(0)))">Cotation : {{ voie.cotation }}<span
+                <p v-if="[5,6].includes(parseInt(bloc.cotation.charAt(0)))">Cotation : {{ bloc.cotation }}<span
                         class="point"
                         style="color: orange; font-size: 60px">&#8226;</span>
                 </p>
-                <p v-if="parseInt(voie.cotation.charAt(0))<5">Cotation : {{ voie.cotation }}<span class="point"
+                <p v-if="parseInt(bloc.cotation.charAt(0))<5">Cotation : {{ bloc.cotation }}<span class="point"
                                                                                                   style="color: limegreen; font-size: 60px">&#8226;</span>
                 </p>
-                <p v-on:click="selectPersonne(voie.ouvreur)" id="ouvreur">Ouvreur :
-                    {{voie.nomOuvreur}}</p>
+                <p v-on:click="selectPersonne(bloc.ouvreur)" id="ouvreur">Ouvreur :
+                    {{bloc.nomOuvreur}}</p>
 
                 <div class="buttonsRow">
                     <button class="buttons" id="afficherFormulaireGrimpeur" onclick="afficherFormulaireGrimpeur()"><img
                             src="assets/done.svg" class="icons">
                     </button>
-                    <button class="buttons" id="supr" onclick="suprVoie()"><img
+                    <button class="buttons" id="supr" onclick="suprBloc()"><img
                             src="assets/delete.svg" class="icons">
                     </button>
                 </div>
             </div>
-            <div v-if="voie.imageUrl != null" class="divImgVoie column">
-                <img :src="'images/' + voie.imageUrl" alt="Image de la voie" class="imgVoie">
+            <div v-if="bloc.imageUrl != null" class="divImgVoie column">
+                <img :src="'images/' + bloc.imageUrl" alt="Image de la voie" class="imgVoie">
             </div>
 
             <!-- Formulaire d'ajout de grimpeur -->
@@ -61,13 +62,13 @@
                     <label for="comment">Commentaire :</label><br>
                     <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
                     <br>
-                    <button type="button" onclick="ajouterGrimpe()" class="button-form">Ajouter</button>
+                    <button type="button" onclick="ajouterGrimpeBloc()" class="button-form">Ajouter</button>
                 </form>
             </div>
         </fieldset>
         <fieldset class="fieldsetInfo">
             <legend>Les grimpeurs</legend>
-            <table v-if="grimpes.length>0" class="table">
+            <table v-if="grimpesBloc.length>0" class="table">
                 <thead>
                 <tr>
                     <th>Identifiant de la personne</th>
@@ -76,18 +77,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="grimpe in grimpes" :key="grimpe._id" v-on:click="selectGrimpeur(grimpe)">
-                    <td>{{ grimpe.nomGrimpeur }}</td>
-                    <td>{{ formatDate(grimpe.date) }}</td>
-                    <td>{{ grimpe.commentaire }}</td>
+                <tr v-for="grimpeBloc in grimpesBloc" :key="grimpeBloc._id" v-on:click="selectGrimpeur(grimpeBloc)">
+                    <td>{{ grimpeBloc.nomGrimpeur }}</td>
+                    <td>{{ formatDate(grimpeBloc.date) }}</td>
+                    <td>{{ grimpeBloc.commentaire }}</td>
                 </tr>
                 </tbody>
             </table>
-            <p v-else v-if="grimpes.length===0">Aucune données disponibles.</p>
+            <p v-else v-if="grimpesBloc.length===0">Aucune données disponibles.</p>
         </fieldset>
     </div>
 </div>
-<script src="scriptInfoVoie.js"></script>
+<script src="scriptInfoBloc.js"></script>
 <script>
     function afficherFormulaireGrimpeur() {
         document.getElementById("formulaireContainerGrimpeur").style.display = "block";
@@ -95,15 +96,14 @@
         var month = date.getMonth() + 1;
         if (month < 9)
             month = "0" + month;
-        const stringDate = date.getFullYear() + '-' + month + '-' + date.getDate();
-        document.getElementById("date").value = stringDate;
+        document.getElementById("date").value = date.getFullYear() + '-' + month + '-' + date.getDate();
     }
 
     function cacheFormulaireGrimpeur() {
         document.getElementById("formulaireContainerGrimpeur").style.display = "none";
     }
 
-    function suprVoie(){
+    function suprBloc(){
         fetch('http://localhost:3000/api/auth/profile', {
             method: 'GET',
             headers: {
@@ -115,7 +115,7 @@
             .then(data => {
                 this.user = data.user;
 
-                const idVoie = new URLSearchParams(window.location.search).get('id');
+                const idBloc = new URLSearchParams(window.location.search).get('id');
 
                 const dataToSend = {
                     user: this.user._id,
@@ -132,7 +132,7 @@
                     body: JSON.stringify(dataToSend)
                 };
 
-                fetch('http://localhost:3000/api/voies/' + idVoie, requestOptions)
+                fetch('http://localhost:3000/api/blocs/' + idBloc, requestOptions)
                     .then(response => response.json())
                     .then(data => {
                         window.location.href ='index.html';
@@ -141,7 +141,7 @@
             .catch(error => console.error('Erreur lors de la requête:', error));
     }
 
-    function ajouterGrimpe() {
+    function ajouterGrimpeBloc() {
         fetch('http://localhost:3000/api/auth/profile', {
             method: 'GET',
             headers: {
@@ -160,7 +160,7 @@
 
                 const dataToSend = {
                     grimpeur: this.user._id,
-                    voie: idVoie,
+                    voie: "661f8738cbd493cedae3130a",
                     date: date,
                     commentaire: comment
                 };
@@ -178,7 +178,7 @@
                 };
 
 
-                fetch('http://localhost:3000/api/grimpe', requestOptions)
+                fetch('http://localhost:3000/api/grimpeBloc', requestOptions)
                     .then(response => response.json())
                     .then(data => {
                         cacheFormulaireGrimpeur();

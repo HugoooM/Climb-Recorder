@@ -10,8 +10,8 @@
 <center>
     <nav class="navMenu">
         <a href="index.html">Accueil</a>
-        <a href="index.html#licencies">Licenciés</a>
         <a href="index.html#voies">Voies</a>
+        <a href="index.html#blocs">Blocs</a>
         <a href="login.html" id="login">Connexion</a>
         <a href="signup.html" id="signup">Création d'un compte</a>
         <button id="logoutButton">Se déconnecter</button>
@@ -39,7 +39,7 @@
         </tr>
         </tbody>
     </table>
-    <p v-else v-if="personnes.length === 0">Aucune donnée disponible.</p>
+    <p v-else-if="personnes.length === 0">Aucune donnée disponible.</p>
     <br>
 
 
@@ -47,10 +47,10 @@
 
     <button id="afficherFormulaireVoie" class="button-form">Ajouter une voie</button>
     <!-- Formulaire de création de voie -->
+
     <div id="formulaireContainerVoie" style="display: none;" class="form">
         <span id="fermerFormulaireVoie">&times;</span>
         <form id="formVoie" autocomplete="off">
-            <!-- Contenu du formulaire -->
             <label for="secteur">Secteur :</label>
             <input type="number" id="secteur" name="secteur" min="1">
             <br>
@@ -115,8 +115,84 @@
         </tr>
         </tbody>
     </table>
-    <p v-else v-if="voies.length === 0">Aucune donnée disponible.</p>
+    <p v-else-if="voies.length === 0">Aucune donnée disponible.</p>
+
+    <h2 id="blocs">Liste des blocs du club :</h2>
+
+    <button id="afficherFormulaireBloc" class="button-form">Ajouter un bloc</button>
+
+    <div id="formulaireContainerBloc" style="display: none;" class="form">
+        <span id="fermerFormulaireBloc">&times;</span>
+        <form id="formBloc" autocomplete="off">
+            <label for="secteur">Secteur :</label>
+            <input type="text" id="secteurBloc" name="secteur" min="1">
+            <br>
+
+            <label for="couleur">Couleur :</label>
+            <input type="text" id="couleurBloc" name="couleur">
+            <br>
+
+            <label for="difficulte">Difficulté :</label>
+            <select id="difficulteBloc" name="difficulte">
+                <option value="4a">4a</option>
+                <option value="4b">4b</option>
+                <option value="4c">4c</option>
+                <option value="5a">5a</option>
+                <option value="5b">5b</option>
+                <option value="5c">5c</option>
+                <option value="6a">6a</option>
+                <option value="6b">6b</option>
+                <option value="6c">6c</option>
+                <option value="7a">7a</option>
+                <option value="7b">7b</option>
+                <option value="7c+">7c & +</option>
+            </select>
+            <br>
+
+            <label for="personnes">Ouvreur :</label>
+            <select id="personnesBloc" name="personnes"></select>
+            <br>
+
+            <label for="image">Photo (optionnel) :</label> <br>
+            <input type="file" id="imageBloc" name="image" accept="image/png, image/jpeg"/>
+            <br>
+
+            <button type="button" onclick="ajouterBloc()" class="button-form">Ajouter</button>
+            <p id="erreurBloc">Une erreur s'est produite, merci de réessayer.</p>
+        </form>
+    </div>
+
+    <table v-if="blocs.length > 0" class="table">
+        <thead>
+        <tr>
+            <th>Secteur</th>
+            <th>Couleur</th>
+            <th>Niveau</th>
+            <th>Ouvreur</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="bloc in blocs" :key="bloc._id" v-on:click="selectBloc(bloc)">
+            <td>{{bloc.secteur}}</td>
+            <td>{{ bloc.couleur }}</td>
+            <td v-if="parseInt(bloc.cotation.charAt(0))>6">{{ bloc.cotation }}<span class="point"
+                                                                                    style="color: red; font-size: 60px">&#8226;</span>
+            </td>
+            <td v-if="[5,6].includes(parseInt(bloc.cotation.charAt(0)))">{{ bloc.cotation }}<span class="point"
+                                                                                                  style="color: orange; font-size: 60px">&#8226;</span>
+            </td>
+            <td v-if="parseInt(bloc.cotation.charAt(0))<5">{{ bloc.cotation }}<span class="point"
+                                                                                    style="color: limegreen; font-size: 60px">&#8226;</span>
+            </td>
+            <td>{{bloc.nomOuvreur}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <p v-else v-if="blocs.length === 0">Aucune donnée disponible.</p>
+
 </div>
+
+
 <script>
     // Vérifier si un token est présent dans le localStorage
     const token = localStorage.getItem('token');
@@ -161,11 +237,13 @@
             .then(data => {
                 // Ajouter les options au menu déroulant
                 var select = document.getElementById('personnes');
+                var selectBloc = document.getElementById('personnesBloc');
                 data.forEach(function (personne) {
                     var option = document.createElement('option');
                     option.value = personne._id;
                     option.textContent = personne.firstname + ' ' + personne.name;
                     select.appendChild(option);
+                    selectBloc.appendChild(option);
                 })
             })
             .catch(error => console.error('Erreur lors de la requête:', error));
@@ -179,7 +257,7 @@
         var ouvreur = document.getElementById('personnes').value;
         const image = document.getElementById('image').files[0];
 
-        if (secteur === "" || couleur === "" || difficulte === "" || ouvreur === "") {
+        if (secteur === "" || couleur === "" || cotation === "" || ouvreur === "") {
             erreurVoie.style.display = "block";
         } else {
             const formData = new FormData();
@@ -208,7 +286,45 @@
         formulaireContainerVoie.style.display = 'none';
         erreurVoie.style.display = "none";
         location.reload();
+    }
 
+    function ajouterBloc() {
+        // Récupérer les valeurs des champs du formulaire
+        var secteur = document.getElementById('secteurBloc').value;
+        var couleur = document.getElementById('couleurBloc').value;
+        var cotation = document.getElementById('difficulteBloc').value;
+        var ouvreur = document.getElementById('personnesBloc').value;
+        const image = document.getElementById('imageBloc').files[0];
+
+        if (secteur === "" || couleur === "" || cotation === "" || ouvreur === "") {
+            erreurBloc.style.display = "block";
+        } else {
+            const formData = new FormData();
+            formData.append('bloc', JSON.stringify({
+                secteur: secteur,
+                couleur: couleur,
+                ouvreur: ouvreur,
+                cotation: cotation,
+                commentaire: 'COMMENTAIRE'
+            }));
+            formData.append('image', image);
+
+            const token = localStorage.getItem('token');
+
+            fetch('http://localhost:3000/api/blocs', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Erreur lors de la requête:', error));
+        }
+        formulaireContainerBloc.style.display = 'none';
+        erreurBloc.style.display = "none";
+        location.reload();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -221,16 +337,36 @@
     var afficherFormulaireVoieBtn = document.getElementById('afficherFormulaireVoie');
     var formulaireContainerVoie = document.getElementById('formulaireContainerVoie');
 
-    // Fermeture du formulaire
+    var fermerFormulaireBlocBtn = document.getElementById('fermerFormulaireBloc');
+    var erreurBloc = document.getElementById("erreurBloc");
+    var afficherFormulaireBlocBtn = document.getElementById('afficherFormulaireBloc');
+    var formulaireContainerBloc = document.getElementById('formulaireContainerBloc');
+
+    // Fermeture des formulaires
     fermerFormulaireVoieBtn.addEventListener('click', function () {
         formulaireContainerVoie.style.display = 'none';
         erreurVoie.style.display = "none";
     });
 
+    fermerFormulaireBlocBtn.addEventListener('click', function () {
+        formulaireContainerBloc.style.display = 'none';
+        erreurBloc.style.display = "none";
+    });
+
     // Ouverture des formulaires
     afficherFormulaireVoieBtn.addEventListener('click', function () {
         formulaireContainerVoie.style.display = 'block';
+        formulaireContainerBloc.style.display = 'none';
+        erreurBloc.style.display = "none";
     });
+
+    afficherFormulaireBlocBtn.addEventListener('click', function () {
+        formulaireContainerBloc.style.display = 'block';
+        formulaireContainerVoie.style.display = 'none';
+        erreurVoie.style.display = "none";
+    });
+
+
 
 </script>
 </body>
