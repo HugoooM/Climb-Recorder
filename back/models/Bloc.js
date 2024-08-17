@@ -6,7 +6,8 @@ const blocSchema = mongoose.Schema({
     couleur: {type: String, required: true},
     ouvreur: {type: mongoose.Schema.Types.ObjectId, ref: user, required: true},
     cotation: {type: String, required: true},
-    commentaire: {type: String, required: false}
+    commentaire: {type: String, required: false},
+    imageUrl:{type: String, required: false}
 });
 
 module.exports = mongoose.model('Bloc', blocSchema);

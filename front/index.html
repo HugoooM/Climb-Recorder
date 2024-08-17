@@ -242,8 +242,11 @@
                     var option = document.createElement('option');
                     option.value = personne._id;
                     option.textContent = personne.firstname + ' ' + personne.name;
+                    var optionB = document.createElement('option');
+                    optionB.value = personne._id;
+                    optionB.textContent = personne.firstname + ' ' + personne.name;
                     select.appendChild(option);
-                    selectBloc.appendChild(option);
+                    selectBloc.appendChild(optionB);
                 })
             })
             .catch(error => console.error('Erreur lors de la requête:', error));
